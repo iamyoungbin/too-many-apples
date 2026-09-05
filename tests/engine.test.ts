@@ -26,11 +26,10 @@ test('nickname validation and Unicode normalization', () => {
   for (const v of ['', ' ', 'a'.repeat(13), 'a\u200bb', null])
     assert.throws(() => nickname(v), GameError);
 });
-test('room capacity is 2–8 and nicknames are unique', () => {
+test('room capacity is 1–8 and nicknames are unique', () => {
   const room = setup(8);
   assert.throws(() => act(room, 'p9', { type: 'join', name: '초과' }, now));
   const solo = setup(1);
-  assert.throws(() => act(solo, 'host', { type: 'start', round: 0 }, now));
   assert.throws(() =>
     act(solo, 'duplicate', { type: 'join', name: '방장' }, now),
   );
@@ -143,4 +142,26 @@ test('every generated board has 170 values in 1..9 and a valid opening', () => {
     assert.ok(b.every((n) => n >= 1 && n <= 9));
     assert.equal(b[0] + b[1], 10);
   }
+});
+
+test('solo player can start, score, finish and rematch', () => {
+  const room = setup(1);
+  act(room, 'host', { type: 'start', round: 0 }, now);
+  assert.equal(room.players.length, 1);
+  assert.equal(room.endsAt - room.startsAt, DURATION);
+  act(
+    room,
+    'host',
+    { type: 'select', rect: [0, 0, 1, 0], round: 1 },
+    room.startsAt,
+  );
+  const result = publicRoom(room, 'host', 1, room.endsAt);
+  assert.equal(result.phase, 'finished');
+  assert.equal(result.players[0].score, 2);
+  assert.equal(result.players[0].rank, 1);
+  const previous = [...room.board];
+  act(room, 'host', { type: 'start', round: 1 }, room.endsAt);
+  assert.equal(room.round, 2);
+  assert.equal(room.players[0].score, 0);
+  assert.notDeepEqual(room.board, previous);
 });

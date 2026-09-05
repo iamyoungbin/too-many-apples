@@ -179,8 +179,8 @@ export function act(
     if (phase(room, now) === 'playing' || phase(room, now) === 'countdown')
       throw new GameError('이미 진행 중인 게임입니다.', 409);
     const ready = room.players.filter((p) => online(p, now));
-    if (ready.length < 2 || ready.length > 8)
-      throw new GameError('접속 중인 참가자 2~8명이 필요합니다.', 409);
+    if (ready.length < 1 || ready.length > 8)
+      throw new GameError('접속 중인 참가자 1~8명이 필요합니다.', 409);
     if (action.round !== room.round)
       throw new GameError('이미 새로운 라운드가 시작되었습니다.', 409);
     room.players = ready;

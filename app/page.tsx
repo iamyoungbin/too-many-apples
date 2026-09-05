@@ -88,7 +88,7 @@ export default function Home() {
             </span>
             <h1>
               {state === 'lobby'
-                ? '함께할 친구를 기다려요.'
+                ? '혼자서도, 친구와 함께도.'
                 : state === 'finished'
                   ? '이번 승부의 결과는?'
                   : '더 많이 모아보세요.'}
@@ -123,7 +123,7 @@ export default function Home() {
                     <Users size={30} />
                   </span>
                   <h2>오늘의 사과 수집가들</h2>
-                  <p>친구에게 초대 링크를 보내고 함께 시작하세요.</p>
+                  <p>바로 시작하거나, 친구에게 초대 링크를 보내세요.</p>
                 </div>
                 <div className="player-seats">
                   {Array.from({ length: 8 }, (_, i) => {
@@ -168,7 +168,7 @@ export default function Home() {
                   <span>
                     <b>{online}</b> / 8명 참가 중
                   </span>
-                  <span>2명 이상이면 시작할 수 있어요.</span>
+                  <span>혼자 시작하거나 친구를 초대할 수 있어요.</span>
                 </div>
               </div>
             ) : state === 'finished' ? (
@@ -355,7 +355,7 @@ export default function Home() {
                   <>
                     <Button
                       className="primary-button"
-                      disabled={busy || online < 2 || !connected}
+                      disabled={busy || online < 1 || !connected}
                       onClick={() =>
                         game.run({ type: 'start', round: room.round })
                       }
@@ -372,9 +372,9 @@ export default function Home() {
                           : '게임 시작하기'}
                     </Button>
                     <p>
-                      {online < 2
-                        ? '접속 중인 참가자가 2명 이상 필요해요.'
-                        : '모두 3초 카운트다운 후 시작해요.'}
+                      {online < 1
+                        ? '서버 연결을 확인하고 있어요.'
+                        : '3초 카운트다운 후 시작해요.'}
                     </p>
                   </>
                 ) : (
@@ -396,7 +396,7 @@ export default function Home() {
           </aside>
         </section>
         <footer>
-          작은 사과, 치열한 승부.<span>PC 마우스 전용 · 2~8인 대전</span>
+          작은 사과, 치열한 승부.<span>PC 마우스 전용 · 1~8인 대전</span>
         </footer>
       </main>
     );
@@ -469,7 +469,7 @@ export default function Home() {
                 대신 새 방 만들기
               </button>
             )}
-            <p className="form-note">회원가입 없이 · 2~8명 · PC 마우스</p>
+            <p className="form-note">회원가입 없이 · 1~8명 · PC 마우스</p>
           </form>
         </div>
         <div className="rule-panel">
